@@ -1,0 +1,299 @@
+<script src="https://cdn.crowdfiber.io/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.crowdfiber.io/jquery/3.3.1/jquery-ui.min.js"></script>
+
+<style>
+    html {
+        font-size: 100%;
+        font-family: inherit;
+    }
+
+    form input[type=text] {
+        height: 40px;
+        min-height: unset;
+    }
+
+    .cf-container {
+        position: relative;
+    }
+
+    .cf-input.cf-large {
+        font-size: 1rem;
+        padding-left: 10px;
+    }
+
+    .cf-input,
+    .cf-select select {
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        align-items: center;
+        border: 1px solid #dbdbdb;
+        border-radius: 4px;
+        box-shadow: none;
+        display: inline-flex;
+        height: 2.45em;
+        font-size: 1rem;
+        color: #666666;
+        background-color: #ffffff;
+        justify-content: flex-start;
+        line-height: 1.5;
+        padding-bottom: calc(.375em - 1px);
+        padding-left: calc(.625em - 1px);
+        padding-right: calc(.625em - 1px);
+        padding-top: calc(.375em - 1px);
+        position: relative;
+        vertical-align: top;
+    }
+
+    .cf-input {
+        background-color: #fff;
+        border-color: #dbdbdb;
+        color: #363636;
+        box-shadow: inset 0 1px 2px rgba(10, 10, 10, .1);
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .cf-select {
+        display: inline-block;
+        height: 2.5em;
+        position: relative;
+        vertical-align: top;
+        font-size: 1rem;
+    }
+
+    .cf-select:after {
+        border: 1px solid #0055B7;
+        border-right: 0;
+        border-top: 0;
+        content: " ";
+        display: block;
+        height: 0.5em;
+        pointer-events: none;
+        position: absolute;
+        transform: rotate(-45deg);
+        width: 0.5em;
+        right: 1em;
+        margin-top: -0.5em;
+        top: 50%;
+        z-index: 4;
+    }
+
+    .cf-field {
+        width: 100%;
+    }
+
+    .cf-button.cf-large {
+        width: 100%;
+        border: none;
+        font-size: 1rem;
+        font-weight: bold;
+        height: 2.5em;
+        border-radius: 3px;
+        letter-spacing: 1px;
+        color: #ffffff;
+        padding: unset;
+    }
+
+    .cf-column {
+        display: block;
+        flex-basis: 0;
+        flex-grow: 1;
+        flex-shrink: 1;
+        padding: 0.25rem;
+    }
+
+    @media screen and (min-width: 1000px) {
+        .cf-container {
+            margin: 0 auto;
+            max-width: 960px;
+        }
+    }
+
+    @media screen and (min-width: 769px) {
+        .cf-columns {
+            display: flex;
+        }
+
+        .cf-column.cf-apartment-field {
+            flex: none;
+            width: 16.66667%;
+        }
+
+        .cf-column.cf-zip-field {
+            flex: none;
+            width: 16.66667%;
+        }
+
+        .cf-column.cf-market-dropdown {
+            flex: none;
+            width: unset;
+        }
+
+        .cf-column.cf-submit {
+            flex: none;
+        }
+
+        .cf-field {
+            width: 150px;
+        }
+
+        .cf-button.cf-large {
+            width: 75px;
+        }
+    }
+
+  	.ui-autocomplete {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 99999;
+        float: left;
+        display: none;
+        min-width: 160px;
+        margin: 2px 0 0 0;
+        list-style: none;
+        background-color: #ffffff;
+        border: none;
+        font-size: 13px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        -webkit-background-clip: padding-box;
+        -moz-background-clip: padding;
+        background-clip: padding-box;
+        *border-right-width: 2px;
+        *border-bottom-width: 2px;
+    }
+
+    .address_lookup_text {
+        padding: 5px 10px 5px 10px;
+        font-weight: bold;
+        font-family: sans-serif;
+        border-bottom: 1px solid #ececec;
+    }
+
+    .cf-state {
+        display: inline;
+        font-weight: lighter;
+        font-size: 12px;
+        color: #777777;
+    }
+
+    .ui-menu .ui-menu-item {
+        cursor: pointer;
+    }
+
+    .ui-widget-content .ui-state-active {
+        border-bottom: 1px solid #ececec;
+        background: #f7f7f7;
+        color: #111;
+    }
+
+    .ui-helper-hidden-accessible {
+        display: none;
+    }
+.cf-container {
+  padding-bottom: 30px;
+}
+</style>
+
+{{ post_url | form_tag }}
+<div class="cf-container">
+    <div class="cf-columns">
+        <div class="cf-column cf-address-field">
+            <input style="display:none !important"></input>
+            <input id="locate_address_id" name="locate[address_id]" type="hidden"></input>
+            <input aria-required="true" autocomplete="no" class="cf-input cf-large street ui-autocomplete-input"
+                id="locate_address" name="locate[address]" placeholder="Address" required="required"
+                type="text"></input>
+            <span id="locate_address_description"></span>
+        </div>
+        <div class="cf-column cf-apartment-field">
+            <input class="cf-input cf-large apartment_number" data-provide="typeahead" id="locate_apartment_number"
+                name="locate[apartment_number]" placeholder="Unit #" type="text"></input>
+        </div>
+        <div class="cf-column cf-zip-field">
+            <input aria-required="true" class="cf-input cf-large zip" id="locate_zip" name="locate[zip]"
+                placeholder="Zip" required="required" style="min-width: 90px" type="text"></input>
+        </div>
+        {% if show_service_classes %}
+        <div class="cf-column cf-market-dropdown">
+            <div class="cf-field">
+                <span class="cf-select cf-large" style="width: 100%;">
+                    <select id="{{service_class}}" name="locate[service_class]"
+                        required style="line-height: 1.5rem; height: 40px; width: 100%" >
+                        <option value="">{{ campaign.market_select_text }}</option>
+                        {% for service_class in service_classes %}
+                        {% if service_class.active %}
+                        <option {% if service_class.default_service_class %} selected="selected" {% endif %}
+                            value="{{service_class.id}}">{{service_class.name}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </span>
+            </div>
+        </div>
+        {% endif %}
+        <div class="cf-column cf-submit" id="address_search_btn">
+            <input class="cf-button is-success cf-large address_search_button" name="commit"
+                style="background: #1E74BC" type="submit"
+                value="{{'submit_buttton'|t_raw}}"></input>
+        </div>
+    </div>
+</div>
+</form>
+
+
+<script>
+
+    var $j = jQuery.noConflict(true);
+
+    $j(document).ready(function () {
+        $j("#locate_address").attr('autocomplete', 'none');
+
+        $j("#locate_address").autocomplete({
+            minLength: 2,
+            delay: 0,
+            source: function (request, response) {
+                $j.ajax({
+                    url: "{{ base_url }}/front_end/address_lookup.json",
+                    dataType: "json",
+                    data: {
+                        search: request.term
+                    },
+                    success: function (data) {
+                        response(data.slice(0, 5));
+                    }
+                });
+            },
+            focus: function (event, ui) {
+                $j("#project_address").val(ui.item.street_address);
+                return false;
+            },
+            select: function (event, ui) {
+                $j("#locate_address").val(ui.item.street_address);
+                $j("#locate_zip").val(ui.item.zip);
+                $j("#locate_address_id").val(ui.item.id);
+                return false;
+            }
+        }).autocomplete("instance")._renderItem = function (ul, item) {
+            return $j("<li>")
+                .append("<div class='address_lookup_text'>" + " " + item.street_address +
+                    " " + "<div class='cf-state'>" + item.city + ", " + item.state + " " + item.zip + "</div>" + "</div>")
+                .appendTo(ul);
+        };
+
+    });
+
+
+    $j(window).on("load", function () {
+        // Handler when all assets (including images) are loaded
+        $j("#locate_address").attr('autocomplete', 'none');
+        console.log('done')
+    });
+
+
+</script>

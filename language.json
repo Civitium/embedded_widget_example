@@ -1,0 +1,28 @@
+[
+  {
+    "key": "button-color",
+    "value": "#E35252",
+    "type": "Color Selector",
+    "attachment": null,
+    "attachment_file_name": null,
+    "attachment_content_type": null,
+    "dynamic_css": "",
+    "show_in_toolbar": false,
+    "select_values": null,
+    "custom_class": "",
+    "boolean_selector": false
+  },
+  {
+    "key": "submit_buttton",
+    "value": "GO",
+    "type": "Short Text",
+    "attachment": null,
+    "attachment_file_name": null,
+    "attachment_content_type": null,
+    "dynamic_css": "",
+    "show_in_toolbar": false,
+    "select_values": null,
+    "custom_class": "",
+    "boolean_selector": false
+  }
+]
