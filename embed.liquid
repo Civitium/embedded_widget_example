@@ -1,19 +1,16 @@
 <script src="https://cdn.crowdfiber.io/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.crowdfiber.io/jquery/3.3.1/jquery-ui.min.js"></script>
-
 <style>
-    html {
-        font-size: 100%;
-        font-family: inherit;
-    }
+    {{ 'all'| dynamic_css}}
 
-    form input[type=text] {
+    .cf-column input {
         height: 40px;
         min-height: unset;
     }
 
     .cf-container {
         position: relative;
+        padding-bottom: 150px;
     }
 
     .cf-input.cf-large {
@@ -51,6 +48,7 @@
         box-shadow: inset 0 1px 2px rgba(10, 10, 10, .1);
         max-width: 100%;
         width: 100%;
+        box-sizing: border-box;
     }
 
     .cf-select {
@@ -151,6 +149,7 @@
         display: none;
         min-width: 160px;
         margin: 2px 0 0 0;
+        padding-left: 0;
         list-style: none;
         background-color: #ffffff;
         border: none;
@@ -195,9 +194,6 @@
     .ui-helper-hidden-accessible {
         display: none;
     }
-.cf-container {
-  padding-bottom: 30px;
-}
 </style>
 
 {{ post_url | form_tag }}
@@ -238,9 +234,7 @@
         </div>
         {% endif %}
         <div class="cf-column cf-submit" id="address_search_btn">
-            <input class="cf-button is-success cf-large address_search_button" name="commit"
-                style="background: #1E74BC" type="submit"
-                value="{{'submit_buttton'|t_raw}}"></input>
+            <input class="cf-button is-success cf-large address_search_button" name="commit" type="submit" value="{{'submit_buttton'|t_raw}}"></input>
         </div>
     </div>
 </div>
