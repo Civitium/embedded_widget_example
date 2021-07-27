@@ -6,7 +6,7 @@
     "attachment": null,
     "attachment_file_name": null,
     "attachment_content_type": null,
-    "dynamic_css": "",
+    "dynamic_css": ".cf-button.address_search_button {\r\n  background-color: {{value}};\r\n  cursor: pointer;\r\n}\r\n.cf-button.address_search_button:hover {\r\n  background-color: #000000;\r\n}",
     "show_in_toolbar": false,
     "select_values": null,
     "custom_class": "",
