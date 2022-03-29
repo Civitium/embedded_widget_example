@@ -201,17 +201,17 @@
         <div class="cf-column cf-address-field">
             <input style="display:none !important"></input>
             <input id="locate_address_id" name="locate[address_id]" type="hidden"></input>
-            <input aria-required="true" autocomplete="no" class="cf-input cf-large street ui-autocomplete-input"
+            <input aria-required="true" autocomplete="no" class="cf-input cf-large street ui-autocomplete-input locate_address"
                 id="locate_address" name="locate[address]" placeholder="Address" required="required"
                 type="text"></input>
-            <span id="locate_address_description"></span>
+            <span id="locate_address_description" class="locate_address_description"></span>
         </div>
         <div class="cf-column cf-apartment-field">
-            <input class="cf-input cf-large apartment_number" data-provide="typeahead" id="locate_apartment_number"
+            <input class="cf-input cf-large apartment_number locate_apartment_number" data-provide="typeahead" id="locate_apartment_number"
                 name="locate[apartment_number]" placeholder="Unit #" type="text"></input>
         </div>
         <div class="cf-column cf-zip-field">
-            <input aria-required="true" class="cf-input cf-large zip" id="locate_zip" name="locate[zip]"
+            <input aria-required="true" class="cf-input cf-large zip locate_zip" id="locate_zip" name="locate[zip]"
                 placeholder="Zip" required="required" style="min-width: 90px" type="text"></input>
         </div>
         {% if show_service_classes %}
@@ -241,52 +241,41 @@
 
 
 <script>
+  var $j = jQuery.noConflict(true);
 
-    var $j = jQuery.noConflict(true);
+  $j(document).ready(function() {
+      $j(".locate_address").autocomplete({
+        
+          minLength: 2,
+          delay: 0,
+          source: function(request, response) {
+              $j.ajax({
+                  url: "{{ base_url }}/front_end/address_lookup.json",
+                  dataType: "json",
+                  data: {
+                      search: request.term
+                  },
+                  success: function(data) {
+                      response(data.slice(0, 5));
+                  }
+              });
+          },
+          focus: function(event, ui) {
+              $j("#project_address").val(ui.item.street_address);
+              return false;
+          },
+          select: function(event, ui) {
+              $j(".locate_address").val(ui.item.street_address);            
+              $j(".locate_zip").val(ui.item.zip);
+              $j(".locate_address_id").val(ui.item.id);
+              return false;
+          }
+      }).autocomplete("instance")._renderItem = function(ul, item) {
+          return $j("<li>")
+              .append("<div  class='address_lookup_text'>" + item.street_address +
+                      "<br>" + item.city + ", " + item.state + ", " + item.zip + "</div>")
+              .appendTo(ul);
+      };
 
-    $j(document).ready(function () {
-        $j("#locate_address").attr('autocomplete', 'none');
-
-        $j("#locate_address").autocomplete({
-            minLength: 2,
-            delay: 0,
-            source: function (request, response) {
-                $j.ajax({
-                    url: "{{ base_url }}/front_end/address_lookup.json",
-                    dataType: "json",
-                    data: {
-                        search: request.term
-                    },
-                    success: function (data) {
-                        response(data.slice(0, 5));
-                    }
-                });
-            },
-            focus: function (event, ui) {
-                $j("#project_address").val(ui.item.street_address);
-                return false;
-            },
-            select: function (event, ui) {
-                $j("#locate_address").val(ui.item.street_address);
-                $j("#locate_zip").val(ui.item.zip);
-                $j("#locate_address_id").val(ui.item.id);
-                return false;
-            }
-        }).autocomplete("instance")._renderItem = function (ul, item) {
-            return $j("<li>")
-                .append("<div class='address_lookup_text'>" + " " + item.street_address +
-                    " " + "<div class='cf-state'>" + item.city + ", " + item.state + " " + item.zip + "</div>" + "</div>")
-                .appendTo(ul);
-        };
-
-    });
-
-
-    $j(window).on("load", function () {
-        // Handler when all assets (including images) are loaded
-        $j("#locate_address").attr('autocomplete', 'none');
-        console.log('done')
-    });
-
-
+  });
 </script>
