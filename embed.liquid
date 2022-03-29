@@ -241,15 +241,15 @@
 
 
 <script>
-  var $j = jQuery.noConflict(true);
+  var $cfJ = jQuery.noConflict(true);
 
-  $j(document).ready(function() {
-      $j(".locate_address").autocomplete({
+  (document).ready(function() {
+      $cfJ(".locate_address").autocomplete({
         
           minLength: 2,
           delay: 0,
           source: function(request, response) {
-              $j.ajax({
+              $cfJ.ajax({
                   url: "{{ base_url }}/front_end/address_lookup.json",
                   dataType: "json",
                   data: {
@@ -261,17 +261,17 @@
               });
           },
           focus: function(event, ui) {
-              $j("#project_address").val(ui.item.street_address);
+              $cfJ("#project_address").val(ui.item.street_address);
               return false;
           },
           select: function(event, ui) {
-              $j(".locate_address").val(ui.item.street_address);            
-              $j(".locate_zip").val(ui.item.zip);
-              $j(".locate_address_id").val(ui.item.id);
+              $cfJ(".locate_address").val(ui.item.street_address);            
+              $cfJ(".locate_zip").val(ui.item.zip);
+              $cfJ(".locate_address_id").val(ui.item.id);
               return false;
           }
       }).autocomplete("instance")._renderItem = function(ul, item) {
-          return $j("<li>")
+          return $cfJ("<li>")
               .append("<div  class='address_lookup_text'>" + item.street_address +
                       "<br>" + item.city + ", " + item.state + ", " + item.zip + "</div>")
               .appendTo(ul);
